@@ -40,7 +40,7 @@ accuracy = net.evaluation(x_test, y_test)
 ## Installation
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 ```bash
-git clone git clone https://github.com/Bakhitovd/IntroDL
+git clone https://github.com/Bakhitovd/IntroDL
 ```
 ```python
 from ann import Network, FCLayer, ActivationLayer
