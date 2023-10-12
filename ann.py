@@ -4,55 +4,6 @@
 
 import numpy as np
 
-class Layer:
-    def __init__(self):
-        self.input = None
-        self.output = None
-
-    # computes the output Y of a layer for a given input X
-    def forward_propagation(self, input):
-        raise NotImplementedError
-
-    # computes dE/dX for a given dE/dY (and update parameters if any)
-    def backward_propagation(self, output_error, learning_rate):
-        raise NotImplementedError
-        
-
-# inherit from base class Layer
-class FCLayer(Layer):
-    # input_size = number of input neurons
-    # output_size = number of output neurons
-    def __init__(self, input_size, output_size):
-        self.weights = np.random.rand(input_size, output_size) - 0.5
-        self.bias = np.random.rand(1, output_size) - 0.5
-
-    # returns output for a given input
-    def forward_propagation(self, input_data):
-        self.input = input_data
-        self.output = np.dot(self.input, self.weights) + self.bias
-        return self.output
-
-    # computes dE/dW, dE/dB for a given output_error=dE/dY. Returns input_error=dE/dX.
-    def backward_propagation(self, output_error, learning_rate):
-        input_error = np.dot(output_error, self.weights.T)
-        weights_error = np.dot(self.input.T, output_error)
-        # dBias = output_error
-
-        # update parameters
-        self.weights -= learning_rate * weights_error
-        self.bias -= learning_rate * output_error
-        return input_error
-
-    
-    
-#     tanh activation function
-def tanh(x):
-    return np.tanh(x);
-
-def tanh_prime(x):
-    return 1-np.tanh(x)**2;
-
-
 # mean squared error 
 def mse(y_true, y_pred):
     return np.mean(np.power(y_true-y_pred, 2))
@@ -60,33 +11,18 @@ def mse(y_true, y_pred):
 def mse_prime(y_true, y_pred):
     return 2*(y_pred-y_true)/y_true.size  
 
+def binary_cross_entropy(y_true, y_pred):
+    return np.mean(-y_true * np.log(y_pred) - (1 - y_true) * np.log(1 - y_pred))
 
-# Activation layer class
-class ActivationLayer(Layer):
-    def __init__(self, activation_function = 'tanh'):
-        if activation_function == 'tanh':
-            self.activation = tanh
-            self.activation_prime = tanh_prime
+def binary_cross_entropy_prime(y_true, y_pred):
+    return ((1 - y_true) / (1 - y_pred) - y_true / y_pred) / np.size(y_true)
 
-    # returns the activated input
-    def forward_propagation(self, input_data):
-        self.input = input_data
-        self.output = self.activation(self.input)
-        return self.output
-
-    # Returns input_error=dE/dX for a given output_error=dE/dY.
-    # learning_rate is not used because there is no "learnable" parameters.
-    def backward_propagation(self, output_error, learning_rate):
-        return self.activation_prime(self.input) * output_error
-    
-     
-    
 # the model class    
 class Network:
-    def __init__(self):
+    def __init__(self, loss = 'mse'):
         self.layers = []
-        self.loss = mse
-        self.loss_prime = mse_prime
+        self.loss = mse if loss == 'mse' else binary_cross_entropy
+        self.loss_prime = mse_prime if loss == 'mse' else binary_cross_entropy_prime
 
     # add layer to network
     def add(self, layer):
@@ -204,3 +140,9 @@ class Network:
             
             print('epoch %d/%d | training_loss=%f | eval_loss=%f | eval_accuracy=%f' % (i+1, epochs, err, eval_err, eval_acc))
         self.training = {'epoch':epochs_list, 'training_loss': err_list,'eval_loss':eval_err_list, 'eval_accuracy': eval_acc_list}
+
+    def total_params(self):
+        total_params = 0
+        for layer in self.layers:
+            total_params += layer.number_parameters()
+        return total_params
