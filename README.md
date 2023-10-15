@@ -5,9 +5,11 @@ This library provides foundational building blocks for creating and training sim
 ## Features
 - Layer Base Class: A foundational class for creating custom layers.
 - Fully Connected Layer (FCLayer): Implements a fully connected neural network layer.
-- Activation Functions: Currently supports the tanh activation function.
-- Loss Functions: Implements the mean squared error (MSE) loss function.
-- Activation Layer: A layer that applies an activation function to its inputs.
+- Activation Layers: Supports tanh, Softmax, and ReLU activation functions.
+- Loss Functions: Implements the mean squared error (mse) and binary cross-entropy.
+- Pooling Layer: Implements max pooling.
+- Convolutional Layer: Implements 2D convolution.
+- Flatten Layer: Flattens the input.
 - Network Class: Represents a neural network. It allows adding layers, training the network, and making predictions.
 
 ## Usage
