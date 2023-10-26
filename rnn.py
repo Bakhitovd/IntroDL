@@ -58,12 +58,12 @@ class RNN:
             self.Ovr_loss.append(np.squeeze(self.loss / self.x.shape[0]))
             self.loss = 0     
         
-    def predict(self,x):
+    def predict(self,x,y):
         outputs = []
         for sample in range(len(x)):
             self.forward(sample)
             outputs.append(self.yt)
-        return np.array(outputs).reshape(self.y.shape)
+        return np.array(outputs).reshape(y.shape)
 
 def sin_dataset_generator(size =  200, timesteps = 25, phase = 1):
     '''
