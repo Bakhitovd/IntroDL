@@ -18,7 +18,8 @@ This library provides foundational building blocks for creating and training sim
 net = Network()
 ```
 ### Adding Layers:
-```python 
+```python
+net.add(FlattenLayer())
 net.add(FCLayer(input_size, output_size))
 net.add(ActivationLayer(activation_function='tanh'))
 ```
@@ -38,7 +39,8 @@ accuracy = net.evaluation(x_test, y_test)
 
 ### MNIST Example
 ```python
-from ann import Network, FCLayer, ActivationLayer
+from ann import Network
+from layers import FlattenLayer, ActivationLayer, FCLayer
 from keras.datasets import mnist
 from keras import utils
 
@@ -52,10 +54,11 @@ x_test = x_test/255
 y_train = utils.to_categorical(y_train)
 
 model = Network()
-model.add(FCLayer(28*28, 10))
+model.add(FlattenLayer())
+model.add(FCLayer(28*28,10))
 model.add(ActivationLayer())
 
-model.fit(x_train,y_train,100, 0.001, evaluation = 0.1)
+model.fit(x_train,y_train, 20, 0.01, evaluation = 0.1)
 
 ```
 
@@ -66,7 +69,4 @@ model.fit(x_train,y_train,100, 0.001, evaluation = 0.1)
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 ```bash
 git clone https://github.com/Bakhitovd/IntroDL
-```
-```python
-from ann import Network, FCLayer, ActivationLayer
 ```
