@@ -64,7 +64,8 @@ model.fit(x_train,y_train, 20, 0.01, evaluation = 0.1)
 
 ## Dependencies
 - numpy
-
+- scipy
+  
 ## Installation
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 ```bash
